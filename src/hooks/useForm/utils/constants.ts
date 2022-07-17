@@ -1,0 +1,5 @@
+export enum FormEvents {
+  STATE_CHANGE = "STATE_CHANGE",
+  INPUT_CHANGE = "INPUT_CHANGE",
+  RESET_FORM = "RESET_FORM",
+}
