@@ -46,8 +46,6 @@ export const BasicForm = ({ onSuccess = () => {} }) => {
 
 # Docs
 
-# Glossary
-
 ## useForm
 
 useForm is the hook that creates your form. Internally it uses `useRef` and events to store and
@@ -60,39 +58,34 @@ manage your data.
 
 ### Return Values
 
-- `register: (name: string, RegisterProps): RegisteredFieldProps`: Registers the field on the form
-  and returns properties to keep track of the changes.
-- `subscribe: (event: string | string[], cb: (payload?: any) => void) => unsubscribe`: Subscribe to
-  form or field events. Remember to always unsubscribe when the component unmounts. Events:
+- `register`: Registers the field on the form and returns properties to keep track of the changes.
+- `subscribe`: Subscribe to form or field events. Remember to always unsubscribe when the component
+  unmounts. Events:
   - `errorChangeEvent(name: string)`: When the error message of a field changes. Callback called
-    with string|undefined.
+    with `string | undefined`.
   - `valueChangeEvent(name: string)`: When the value of a field changes. Callback called with
-    string|undefined.
+    `string | undefined`.
   - `valueSetEvent(name: string)`: When the value of a field was set using the `setValue` function.
-    Callback called with string|undefined.
+    Callback called with `string | undefined`.
   - `FormEvents.STATE_CHANGE`: When the values of the state change. Callback called with the new
     state.
   - `FormEvents.RESET_FORM`: When the form has been reset. Callback called with the new state.
-- `resetForm: () => void`: Sets the form values and errors to undefined. It sends the event
+- `resetForm`: Sets the form values and errors to undefined. It sends the event
   `FormEvents.RESET_FORM`, and values or errors changes.
-- `getState: () => FormStateRef`: Returns the state of the form.
-- `getValue: (name: string) => any`: Returns the value of the field.
-- `validateForm: () => boolean` Validates all the fields and returns a boolean, `true` if the form
-  has errors. Sends errors changes events.
-- `setValue: (name: string, value?: string) => void`: Sets the value of a field. Triggers only the
-  `valueSetEvent`.
-- `setError: (name: string, errorMessage?: string) => void`: Sets the error of a field. Triggers
-  `errorChangeEvent`.
-- `getError: (name: string) => string | undefined`: Returs the error of a field.
-- `handleSubmit: (onSuccess?: ((state: FormStateType) => void)) => (e: FormEvent<HTMLFormElement>) => void`:
-  Returns a function that receibes the form submit event, runs the `validateForm` function, and if
-  successfull, calls the `onSuccess` callback.
-- `validateField: (inputName: string) => string | undefined`: Validates a single field. Triggers
-  `errorChangeEvent`.
+- `getState`: Returns the state of the form.
+- `getValue`: Returns the value of the field.
+- `validateForm` Validates all the fields and returns a boolean, `true` if the form has errors.
+  Sends errors changes events.
+- `setValue`: Sets the value of a field. Triggers only the `valueSetEvent`.
+- `setError`: Sets the error of a field. Triggers `errorChangeEvent`.
+- `getError`: Returs the error of a field.
+- `handleSubmit`: Returns a function that receibes the form submit event, runs the `validateForm`
+  function, and if successfull, calls the `onSuccess` callback.
+- `validateField`: Validates a single field. Triggers `errorChangeEvent`.
 
 # Examples
 
-## With Errors
+## Errors
 
 For displaying errors, you need to subscribe to the error change event of the field.
 
@@ -170,7 +163,7 @@ export const BasicForm = ({ onSuccess = () => {} }) => {
         <Field>
           <Input
             name="email"
-            type="text"
+            type="email"
             errors={{
               required: 'This field is required',
             }}

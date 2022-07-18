@@ -38,4 +38,5 @@ export type RegisteredFieldProps = {
 
 export interface UseFormOptions {
   validateOnBlur?: boolean;
+  clearErrorOnChange?: boolean;
 }

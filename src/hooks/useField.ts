@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { FieldChild } from '../components/Field';
 import { useFormContext } from '../context/FormContext/FormProvider';
 import { useForceUpdate } from './useForceUpdate';
+import { FormEvents } from './useForm';
 import { RegisterProps, RegisterPropsTypes } from './useForm/types';
 import { errorChangeEvent } from './useForm/utils/errorChangeEvent';
 import { valueSetEvent } from './useForm/utils/valueSetEvent';
@@ -25,12 +26,12 @@ export const useField = ({ childProps, type }: UseFieldProps) => {
   const currentValue = getValue(name);
 
   useEffect(() => {
-    const unsubscribeValue = subscribe(valueSetEvent(name), forceUpdate);
-    const unsubscribeError = subscribe(errorChangeEvent(name), setErrorMessage);
+    const uns1 = subscribe([valueSetEvent(name), FormEvents.RESET_FORM], forceUpdate);
+    const uns2 = subscribe(errorChangeEvent(name), setErrorMessage);
 
     return () => {
-      unsubscribeValue();
-      unsubscribeError();
+      uns1();
+      uns2();
     };
   }, []);
 

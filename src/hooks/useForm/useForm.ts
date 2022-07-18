@@ -19,7 +19,7 @@ type FormStateRef = { [fieldName: string]: any };
 type ErrorRefType = { [inputName: string]: FormErrorsType | undefined };
 type ErrorMessagesRefType = { [errorName: string]: string | undefined };
 
-export const useForm = ({ validateOnBlur }: UseFormOptions = {}) => {
+export const useForm = ({ validateOnBlur, clearErrorOnChange }: UseFormOptions = {}) => {
   const formStateRef = useRef<FormStateRef>({});
   const errorsRef = useRef<ErrorRefType>({});
   const errorMessagesRef = useRef<ErrorMessagesRefType>({});
@@ -81,6 +81,8 @@ export const useForm = ({ validateOnBlur }: UseFormOptions = {}) => {
 
   const handleInputChange = useCallback(
     (name: string) => (event: string | ChangeEvent<HTMLInputElement>) => {
+      if (clearErrorOnChange) setError(name, undefined);
+
       let inputValue: string | boolean | ChangeEvent<HTMLInputElement> = event;
 
       const isReactEvent = event && typeof event !== 'string' && event.type === 'change';
