@@ -3,7 +3,7 @@
   "license": "MIT",
   "author": "Roman Kusinsky <romankusi@gmail.com>",
   "description": "A small and simple library for handling forms on React.",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "main": "dist/index.min.js",
   "module": "dist/index.es.js",
   "types": "dist/index.d.ts",
