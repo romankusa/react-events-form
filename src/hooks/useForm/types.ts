@@ -1,3 +1,4 @@
+import { ChangeEvent } from 'react';
 import { checkFormError } from './utils/checkFormError';
 
 export type FormErrorsKeys = keyof typeof checkFormError;
@@ -24,6 +25,15 @@ export type RegisterProps = {
   value?: string;
   defaultChecked?: boolean;
   type?: RegisterPropsTypes;
+};
+
+export type RegisteredFieldProps = {
+  name: string;
+  onChange: (event: string | ChangeEvent<HTMLInputElement>) => void;
+  onBlur?: () => void;
+  value?: any;
+  defaultValue?: any;
+  defaultChecked?: boolean;
 };
 
 export interface UseFormOptions {

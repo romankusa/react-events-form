@@ -4,6 +4,7 @@ import {
   FormErrorsKeys,
   FormErrorsType,
   FormStateType,
+  RegisteredFieldProps,
   RegisterProps,
   UseFormOptions,
 } from './types';
@@ -172,7 +173,10 @@ export const useForm = ({ validateOnBlur }: UseFormOptions = {}) => {
   }, [dispatch]);
 
   const register = useCallback(
-    (name: string, { errors, defaultValue, defaultChecked, type, value }: RegisterProps = {}) => {
+    (
+      name: string,
+      { errors, defaultValue, defaultChecked, type, value }: RegisterProps = {},
+    ): RegisteredFieldProps => {
       let currentValue = defaultValue || defaultChecked;
 
       if (type === 'radio' && defaultChecked) currentValue = value;

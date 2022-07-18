@@ -6,7 +6,7 @@ React Events Form is a small and simple library for handling forms on React.
 
 This form is strictly events based, that means, it will never cause a re-render in your component.
 
-All the data of your form will be save on useRefs and never useState or useReducer.
+All the data of your form will be save on `useRefs` and never `useState` or `useReducer`.
 
 With this basic implementation, you can use our default components to re-render your components (ex:
 display error messages), or create your own custom components.
@@ -15,10 +15,16 @@ For updating your component, you can subscribe to different field or form events
 
 ### Installation
 
-Install command
+npm
 
 ```sh
-npm install --save react-events-form
+npm install react-events-form
+```
+
+yarn
+
+```sh
+yarn add react-events-form
 ```
 
 ### Example
@@ -39,6 +45,52 @@ export const BasicForm = ({ onSuccess = () => {} }) => {
 ```
 
 # Docs
+
+# Glossary
+
+## useForm
+
+useForm is the hook that creates your form. Internally it uses `useRef` and events to store and
+manage your data.
+
+### Options
+
+- `validateOnBlur?: boolean`: It will validate the fields when a blur event occurs on them, by
+  default it validates when the form is submitted.
+
+### Return Values
+
+- `register: (name: string, RegisterProps): RegisteredFieldProps`: Registers the field on the form
+  and returns properties to keep track of the changes.
+- `subscribe: (event: string | string[], cb: (payload?: any) => void) => unsubscribe`: Subscribe to
+  form or field events. Remember to always unsubscribe when the component unmounts. Events:
+  - `errorChangeEvent(name: string)`: When the error message of a field changes. Callback called
+    with string|undefined.
+  - `valueChangeEvent(name: string)`: When the value of a field changes. Callback called with
+    string|undefined.
+  - `valueSetEvent(name: string)`: When the value of a field was set using the `setValue` function.
+    Callback called with string|undefined.
+  - `FormEvents.STATE_CHANGE`: When the values of the state change. Callback called with the new
+    state.
+  - `FormEvents.RESET_FORM`: When the form has been reset. Callback called with the new state.
+- `resetForm: () => void`: Sets the form values and errors to undefined. It sends the event
+  `FormEvents.RESET_FORM`, and values or errors changes.
+- `getState: () => FormStateRef`: Returns the state of the form.
+- `getValue: (name: string) => any`: Returns the value of the field.
+- `validateForm: () => boolean` Validates all the fields and returns a boolean, `true` if the form
+  has errors. Sends errors changes events.
+- `setValue: (name: string, value?: string) => void`: Sets the value of a field. Triggers only the
+  `valueSetEvent`.
+- `setError: (name: string, errorMessage?: string) => void`: Sets the error of a field. Triggers
+  `errorChangeEvent`.
+- `getError: (name: string) => string | undefined`: Returs the error of a field.
+- `handleSubmit: (onSuccess?: ((state: FormStateType) => void)) => (e: FormEvent<HTMLFormElement>) => void`:
+  Returns a function that receibes the form submit event, runs the `validateForm` function, and if
+  successfull, calls the `onSuccess` callback.
+- `validateField: (inputName: string) => string | undefined`: Validates a single field. Triggers
+  `errorChangeEvent`.
+
+# Examples
 
 ## With Errors
 
@@ -83,8 +135,9 @@ What the `Field` component does, is subscribe to form events, and pass those pro
 
 ```js
 import React from 'react';
+import type { FieldChild } from 'react-events-form';
 
-export const Input = ({ errorMessage, ...props }: any) => {
+export const Input = ({ errorMessage, ...props }: FieldChild) => {
   return (
     <div>
       <input {...props} />
@@ -101,7 +154,7 @@ import React from 'react';
 import { Field, Form, FormProvider } from 'react-events-form';
 import { Input } from './Input';
 
-export const CBasicForm = ({ onSuccess = () => {} }) => {
+export const BasicForm = ({ onSuccess = () => {} }) => {
   return (
     <FormProvider>
       <Form onSuccess={onSuccess}>
@@ -131,4 +184,4 @@ export const CBasicForm = ({ onSuccess = () => {} }) => {
 
 ## Contributors
 
-- [@romankusinsky](https://romankusinsky.netlify.app/)
+- [@romankusinsky](https://github.com/kusita8)

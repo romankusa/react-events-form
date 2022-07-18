@@ -8,7 +8,6 @@ import { errorChangeEvent, FormEvents, valueSetEvent } from '../../hooks';
 export const CFormMethods = ({
   onSuccess = () => {},
   resetFormCb = () => {},
-  inputChangeCb = () => {},
   stateChangeCb = () => {},
   getStateCb = (state: any) => {},
   getErrorCb = (error: any) => {},
@@ -28,14 +27,12 @@ export const CFormMethods = ({
 
   useEffect(() => {
     const unsub1 = subscribe(FormEvents.RESET_FORM, resetFormCb);
-    const unsub2 = subscribe(FormEvents.INPUT_CHANGE, inputChangeCb);
     const unsub3 = subscribe(FormEvents.STATE_CHANGE, stateChangeCb);
     const unsub4 = subscribe(errorChangeEvent('name'), errorChangeCb);
     const unsub5 = subscribe(valueSetEvent('name'), valueSetCb);
 
     return () => {
       unsub1();
-      unsub2();
       unsub3();
       unsub4();
       unsub5();

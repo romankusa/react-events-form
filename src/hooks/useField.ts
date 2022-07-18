@@ -1,13 +1,15 @@
 import { useEffect, useMemo, useState } from 'react';
-import { FormChildProps } from '../components/Field';
+import { FieldChild } from '../components/Field';
 import { useFormContext } from '../context/FormContext/FormProvider';
 import { useForceUpdate } from './useForceUpdate';
-import { RegisterPropsTypes } from './useForm/types';
+import { RegisterProps, RegisterPropsTypes } from './useForm/types';
 import { errorChangeEvent } from './useForm/utils/errorChangeEvent';
 import { valueSetEvent } from './useForm/utils/valueSetEvent';
 
+export type ChildProps = RegisterProps & { name: string };
+
 interface UseFieldProps {
-  childProps: FormChildProps;
+  childProps: ChildProps;
   type?: RegisterPropsTypes;
 }
 

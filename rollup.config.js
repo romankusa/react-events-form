@@ -39,8 +39,10 @@ export default {
     typescript({
       useTsconfigDeclarationDir: true,
       rollupCommonJSResolveHack: true,
-      exclude: ['**/__tests__/**', '*.spec.*', '*.test.*'],
       clean: true,
+      tsconfigOverride: {
+        exclude: ['**/__mocks__', '**/__tests__/**', '*.spec.*', '*.test.*'],
+      },
     }),
     // Allow node_modules resolution, so you can use 'external' to control
     // which external modules to include in the bundle
