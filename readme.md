@@ -34,7 +34,7 @@ import React from 'react';
 import { useForm } from 'react-events-form';
 
 export const BasicForm = ({ onSuccess = () => {} }) => {
-  const { handleSubmit } = useForm();
+  const { handleSubmit, register } = useForm();
 
   return (
     <form onSubmit={handleSubmit(onSuccess)}>

@@ -1,5 +1,4 @@
 import { useEffect, useMemo, useState } from 'react';
-import { FieldChild } from '../components/Field';
 import { useFormContext } from '../context/FormContext/FormProvider';
 import { useForceUpdate } from './useForceUpdate';
 import { FormEvents } from './useForm';
@@ -15,13 +14,13 @@ interface UseFieldProps {
 }
 
 export const useField = ({ childProps, type }: UseFieldProps) => {
-  const { subscribe, register, getValue } = useFormContext();
+  const { subscribe, register, getValue, getError } = useFormContext();
   const { name, errors, defaultValue, defaultChecked, value } = childProps;
-  const props = useMemo(
+  const registerProps = useMemo(
     () => register(name, { errors, defaultValue, defaultChecked, type, value }),
     [register],
   );
-  const [errorMessage, setErrorMessage] = useState<string | null>();
+  const [errorMessage, setErrorMessage] = useState<string | undefined>(getError(name));
   const [forceUpdate, forceUpdateValue] = useForceUpdate();
   const currentValue = getValue(name);
 
@@ -37,7 +36,7 @@ export const useField = ({ childProps, type }: UseFieldProps) => {
 
   return useMemo(
     () => ({
-      ...props,
+      ...registerProps,
       errorMessage,
       value: currentValue,
     }),
