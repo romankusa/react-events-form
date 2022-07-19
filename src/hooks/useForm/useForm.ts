@@ -80,30 +80,33 @@ export const useForm = ({ validateOnBlur, clearErrorOnChange }: UseFormOptions =
   const getError = useCallback((name: string) => errorMessagesRef.current[name], []);
 
   const handleInputChange = useCallback(
-    (name: string) => (event: string | ChangeEvent<HTMLInputElement>) => {
-      if (clearErrorOnChange) setError(name, undefined);
+    (name: string) =>
+      (event: ChangeEvent<HTMLInputElement> | ChangeEvent<HTMLSelectElement> | string) => {
+        if (clearErrorOnChange) setError(name, undefined);
 
-      let inputValue: string | boolean | ChangeEvent<HTMLInputElement> = event;
+        let inputValue:
+          | string
+          | boolean
+          | ChangeEvent<HTMLInputElement>
+          | ChangeEvent<HTMLSelectElement> = event;
 
-      const isReactEvent = event && typeof event !== 'string' && event.type === 'change';
-      if (isReactEvent) {
-        if (event.persist) event.persist();
-        inputValue =
-          event.currentTarget.type === 'checkbox'
-            ? event.currentTarget.checked
-            : event.currentTarget.value;
-      }
+        const isReactEvent = event && typeof event !== 'string' && event.type === 'change';
+        if (isReactEvent) {
+          if (event.persist) event.persist();
+          const target = event.currentTarget as HTMLInputElement;
+          inputValue = target.type === 'checkbox' ? target.checked : target.value;
+        }
 
-      if (!hasValueChanged(getState(), name, inputValue as string)) return;
+        if (!hasValueChanged(getState(), name, inputValue as string)) return;
 
-      const newState = {
-        ...formStateRef.current,
-        [name]: inputValue,
-      };
-      formStateRef.current = newState;
-      dispatch(valueChangeEvent(name), inputValue);
-      dispatch(FormEvents.STATE_CHANGE, newState);
-    },
+        const newState = {
+          ...formStateRef.current,
+          [name]: inputValue,
+        };
+        formStateRef.current = newState;
+        dispatch(valueChangeEvent(name), inputValue);
+        dispatch(FormEvents.STATE_CHANGE, newState);
+      },
     [dispatch],
   );
 
@@ -132,7 +135,7 @@ export const useForm = ({ validateOnBlur, clearErrorOnChange }: UseFormOptions =
   const getValue = useCallback((name: string) => getState()[name], [getState]);
 
   const setValue = useCallback(
-    (name: string, value?: string) => {
+    (name: string, value?: any) => {
       if (!hasValueChanged(getState(), name, value)) return;
 
       formStateRef.current = {

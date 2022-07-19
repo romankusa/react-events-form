@@ -2,7 +2,7 @@ import React, { useContext } from 'react';
 import { createContext, FC, ReactNode } from 'react';
 import { UseFormOptions, useForm } from '../../hooks';
 
-const FormContext = createContext({} as ReturnType<typeof useForm>);
+export const FormContext = createContext({} as ReturnType<typeof useForm>);
 
 type FormProviderProps = {
   children: ReactNode;

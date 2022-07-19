@@ -2,11 +2,11 @@
 
 React Events Form is a small and simple library for handling forms on React.
 
-### How It Works - Respect The Re-renders
+### How It Works
 
 This form is strictly events based, that means, it will never cause a re-render in your component.
 
-All the data of your form will be save on `useRefs` and never `useState` or `useReducer`.
+The data of your form will be saved on `useRefs` and never `useState` or `useReducer`.
 
 With this basic implementation, you can use our default components to re-render your components (ex:
 display error messages), or create your own custom components.
@@ -48,13 +48,14 @@ export const BasicForm = ({ onSuccess = () => {} }) => {
 
 ## useForm
 
-useForm is the hook that creates your form. Internally it uses `useRef` and events to store and
+useForm is the hook that creates your form. Internally, it uses `useRef` and events to store and
 manage your data.
 
 ### Options
 
-- `validateOnBlur?: boolean`: It will validate the fields when a blur event occurs on them, by
-  default it validates when the form is submitted.
+- `validateOnBlur`: It will validate the fields when a blur event occurs on them, by default it
+  validates when the form is submitted.
+- `clearErrorOnChange`: If the field has an error, it will remove it when the value is changing.
 
 ### Return Values
 
@@ -70,18 +71,46 @@ manage your data.
   - `FormEvents.STATE_CHANGE`: When the values of the state change. Callback called with the new
     state.
   - `FormEvents.RESET_FORM`: When the form has been reset. Callback called with the new state.
-- `resetForm`: Sets the form values and errors to undefined. It sends the event
-  `FormEvents.RESET_FORM`, and values or errors changes.
+- `resetForm`: Sets the form values and errors to undefined. Triggers `FormEvents.RESET_FORM` and
+  `errorChangeEvent` events.
 - `getState`: Returns the state of the form.
 - `getValue`: Returns the value of the field.
 - `validateForm` Validates all the fields and returns a boolean, `true` if the form has errors.
-  Sends errors changes events.
+  Triggers `errorChangeEvent` events.
 - `setValue`: Sets the value of a field. Triggers only the `valueSetEvent`.
 - `setError`: Sets the error of a field. Triggers `errorChangeEvent`.
 - `getError`: Returs the error of a field.
-- `handleSubmit`: Returns a function that receibes the form submit event, runs the `validateForm`
-  function, and if successfull, calls the `onSuccess` callback.
+- `handleSubmit`: Returns a function that receives the form submit event, runs the `validateForm`
+  function, and if successful, calls the `onSuccess` callback.
 - `validateField`: Validates a single field. Triggers `errorChangeEvent`.
+
+## FormProvider & useFormContext
+
+To access the form state on a child component, you need to use `FormProvider` + `useFormContext`.
+
+`FormProvider` is a react context provider which its `value` is the return value of the `useForm`
+hook.
+
+`useFormContext` is a shortcut to accessing the value of the `FormProvider`, doing
+`useContext(FormContext)` would work as well.
+
+## Field
+
+`Field` is a custom component that registers the input and updates it when the value changes. It
+needs to be a child of a `FormProvider`.
+
+## Form
+
+`Form` is a basic form component that calls `handleSubmit` and forwards the `onSuccess` function to
+it. It needs to be a child of a `FormProvider`.
+
+## useField
+
+`useField` is the hook that uses `Field` under the hook. It's useful if you want to create a custom
+`Field` component.
+
+It registers the input and updates its values when they change. It needs to be a child of a
+`FormProvider`.
 
 # Examples
 
@@ -171,6 +200,30 @@ export const BasicForm = ({ onSuccess = () => {} }) => {
         </Field>
       </Form>
     </FormProvider>
+  );
+};
+```
+
+## Select
+
+```js
+import React from 'react';
+import { useForm } from 'react-events-form';
+
+export const BasicForm = ({ onSuccess = () => {} }) => {
+  const { register, handleSubmit, subscribe } = useForm();
+
+  return (
+    <form onSubmit={handleSubmit(onSuccess)}>
+      <select
+        {...register('select', {
+          defaultValue: 1,
+        })}
+      >
+        <option>1</option>
+        <option>2</option>
+      </select>
+    </form>
   );
 };
 ```
