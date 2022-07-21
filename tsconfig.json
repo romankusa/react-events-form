@@ -1,33 +1,23 @@
 {
   "compilerOptions": {
-    "target": "es5",
-    "module": "ESNext",
+    "baseUrl": "./src",
+    "target": "ES6",
+    "module": "CommonJS",
     "lib": ["ESNext", "DOM"],
-    "declaration": true,
+    "moduleResolution": "node",
+    "jsx": "react",
+    "outDir": "dist",
     "declarationDir": "dist",
+    "esModuleInterop": true,
+    "declaration": true,
     "declarationMap": true,
     "downlevelIteration": false,
-    "outDir": "dist",
     "sourceMap": true,
     "strict": true,
-    "esModuleInterop": true,
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
-    "noFallthroughCasesInSwitch": true,
-    "allowJs": false,
-    "moduleResolution": "node",
-    "resolveJsonModule": true,
-    "jsx": "react",
-    "baseUrl": "./src",
-    "paths": {
-      "tslib": ["node_modules/tslib/tslib.d.ts"]
-    },
-    "plugins": [
-      {
-        "name": "typescript-plugin-css-modules"
-      }
-    ]
+    "allowJs": false
   },
   "include": ["src/**/*"],
-  "exclude": ["node_modules", "dist", "**/__mocks__", "**/*.test.tsx", "**/*.spec.tsx"]
+  "exclude": ["node_modules", "dist", "**/__mocks__", "**/__tests__"]
 }
