@@ -144,6 +144,8 @@ export const useForm = ({ validateOnBlur, clearErrorOnChange }: UseFormOptions =
       };
 
       dispatch(valueSetEvent(name), value);
+      dispatch(valueChangeEvent(name), value);
+      dispatch(FormEvents.STATE_CHANGE, formStateRef.current);
     },
     [dispatch, getState],
   );
