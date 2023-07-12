@@ -16,6 +16,7 @@ import { CCheckboxForm } from '../__mocks__/CCheckboxForm';
 import { CFormMethods } from '../__mocks__/CFormMethods';
 import { CValidateOnBlurForm } from '../__mocks__/CValidateOnBlurForm';
 import { FormProvider } from '../../context';
+import { DefaulValueChange } from '../__mocks__/DefaulValueChange';
 
 describe('Components', () => {
   it('displays error messages', async () => {
@@ -189,5 +190,18 @@ describe('Components', () => {
 
     fireEvent.blur(s('input'));
     await expectText('This field is required');
+  });
+
+  it('updates defaultValue when it changes', async () => {
+    const onSuccess = jest.fn();
+    render(
+      <FormProvider>
+        <DefaulValueChange onSuccess={onSuccess} />
+      </FormProvider>,
+    );
+
+    fireEvent.click(screen.getByText('update'));
+    submit('form');
+    await expectFnToHaveBeenCalledWith(onSuccess, { name: 'value' });
   });
 });

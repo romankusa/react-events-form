@@ -209,15 +209,18 @@ export const useForm = ({ validateOnBlur, clearErrorOnChange }: UseFormOptions =
   );
 
   const handleSubmit = useCallback(
-    (onSuccess?: (state: FormStateType) => void) => (e: FormEvent<HTMLFormElement>) => {
-      {
-        e.preventDefault();
+    (onSuccess?: (state: FormStateType) => void, onError?: (state: FormStateType) => void) =>
+      (e: FormEvent<HTMLFormElement>) => {
+        {
+          e.preventDefault();
 
-        const hasErrors = validateForm();
+          const hasErrors = validateForm();
+          const state = getState();
 
-        if (onSuccess && !hasErrors) onSuccess(getState());
-      }
-    },
+          if (hasErrors) onError?.(state);
+          else onSuccess?.(state);
+        }
+      },
     [validateForm, getState],
   );
 

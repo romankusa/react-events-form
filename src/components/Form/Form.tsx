@@ -5,13 +5,14 @@ import { FormStateType } from '../../hooks/useForm/types';
 interface FormProps extends FormHTMLAttributes<HTMLFormElement> {
   children: ReactNode;
   onSuccess?: (state: FormStateType) => void;
+  onError?: (state: FormStateType) => void;
 }
 
-export const Form: FC<FormProps> = ({ children, onSuccess, ...props }) => {
+export const Form: FC<FormProps> = ({ children, onSuccess, onError, ...props }) => {
   const { handleSubmit } = useFormContext();
 
   return (
-    <form onSubmit={handleSubmit(onSuccess)} {...props}>
+    <form onSubmit={handleSubmit(onSuccess, onError)} {...props}>
       {children}
     </form>
   );
