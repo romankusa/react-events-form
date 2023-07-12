@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useMemo } from 'react';
 import { createContext, FC, ReactNode } from 'react';
 import { UseFormOptions, useForm } from '../../hooks';
 
@@ -9,7 +9,9 @@ type FormProviderProps = {
 } & UseFormOptions;
 
 export const FormProvider: FC<FormProviderProps> = ({ children, ...useFormOptions }) => {
-  return <FormContext.Provider value={useForm(useFormOptions)}>{children}</FormContext.Provider>;
+  const contextValue = useMemo(() => useForm(useFormOptions), []);
+
+  return <FormContext.Provider value={contextValue}>{children}</FormContext.Provider>;
 };
 
 export const useFormContext = () => useContext(FormContext);

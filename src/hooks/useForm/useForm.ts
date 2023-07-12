@@ -14,6 +14,7 @@ import { errorChangeEvent } from './utils/errorChangeEvent';
 import { hasValueChanged } from './utils/hasValueChanged';
 import { valueChangeEvent } from './utils/valueChangeEvent';
 import { valueSetEvent } from './utils/valueSetEvent';
+import { getFieldPropsValue } from './utils/getFieldPropsValue';
 
 type FormStateRef = { [fieldName: string]: any };
 type ErrorRefType = { [inputName: string]: FormErrorsType | undefined };
@@ -124,13 +125,6 @@ export const useForm = ({ validateOnBlur, clearErrorOnChange }: UseFormOptions =
     [getChildErrors, setError],
   );
 
-  const handleInputBlur = useCallback(
-    (name: string) => () => {
-      validateField(name);
-    },
-    [validateField],
-  );
-
   const getState = useCallback(() => formStateRef.current, []);
   const getValue = useCallback((name: string) => getState()[name], [getState]);
 
@@ -184,9 +178,7 @@ export const useForm = ({ validateOnBlur, clearErrorOnChange }: UseFormOptions =
       name: string,
       { errors, defaultValue, defaultChecked, type, value }: RegisterProps = {},
     ): RegisteredFieldProps => {
-      let currentValue = defaultValue || defaultChecked;
-
-      if (type === 'radio' && defaultChecked) currentValue = value;
+      const currentValue = getFieldPropsValue(defaultValue, defaultChecked, value, type);
 
       const itWasRegistered = Object.keys(formStateRef.current).find(
         (fieldName) => fieldName === name,
@@ -210,7 +202,7 @@ export const useForm = ({ validateOnBlur, clearErrorOnChange }: UseFormOptions =
         defaultValue,
         defaultChecked,
         onChange: handleInputChange(name),
-        onBlur: validateOnBlur ? handleInputBlur(name) : undefined,
+        onBlur: validateOnBlur ? validateForm : undefined,
       };
     },
     [handleInputChange],

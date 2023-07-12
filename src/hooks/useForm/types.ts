@@ -3,9 +3,7 @@ import { checkFormError } from './utils/checkFormError';
 
 export type FormErrorsKeys = keyof typeof checkFormError;
 
-export type FormStateType = {
-  [name: string]: any;
-};
+export type FormStateType = Record<string, any>;
 
 export type ValidateFunction = (inputValue: string) => string | undefined;
 

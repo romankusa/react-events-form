@@ -7,6 +7,6 @@ export interface FieldChild {
   defaultChecked?: boolean;
   errors?: FormErrorsType;
   errorMessage?: string;
-  onChange?: (event: string | React.ChangeEvent<HTMLInputElement>) => void;
+  onChange?: (value?: any) => void;
   onBlur?: (() => void) | undefined;
 }
