@@ -204,4 +204,20 @@ describe('Components', () => {
     submit('form');
     await expectFnToHaveBeenCalledWith(onSuccess, { name: 'value' });
   });
+
+  it('runs on error with form state', async () => {
+    const onError = jest.fn();
+    render(
+      <FormProvider>
+        <CBasicForm onError={onError} />
+      </FormProvider>,
+    );
+
+    submit('form');
+    await expectFnToHaveBeenCalledWith(
+      onError,
+      { name: undefined },
+      { name: 'This field is required' },
+    );
+  });
 });

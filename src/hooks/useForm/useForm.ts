@@ -20,7 +20,11 @@ type FormStateRef = { [fieldName: string]: any };
 type ErrorRefType = { [inputName: string]: FormErrorsType | undefined };
 type ErrorMessagesRefType = { [errorName: string]: string | undefined };
 
-export const useForm = ({ validateOnBlur, clearErrorOnChange }: UseFormOptions = {}) => {
+export const useForm = ({
+  validateOnBlur,
+  clearErrorOnChange,
+  validateOnChange,
+}: UseFormOptions = {}) => {
   const formStateRef = useRef<FormStateRef>({});
   const errorsRef = useRef<ErrorRefType>({});
   const errorMessagesRef = useRef<ErrorMessagesRefType>({});
@@ -80,6 +84,8 @@ export const useForm = ({ validateOnBlur, clearErrorOnChange }: UseFormOptions =
 
   const getError = useCallback((name: string) => errorMessagesRef.current[name], []);
 
+  const getErrors = useCallback(() => errorMessagesRef.current, []);
+
   const handleInputChange = useCallback(
     (name: string) =>
       (event: ChangeEvent<HTMLInputElement> | ChangeEvent<HTMLSelectElement> | string) => {
@@ -107,6 +113,8 @@ export const useForm = ({ validateOnBlur, clearErrorOnChange }: UseFormOptions =
         formStateRef.current = newState;
         dispatch(valueChangeEvent(name), inputValue);
         dispatch(FormEvents.STATE_CHANGE, newState);
+
+        if (validateOnChange) validateField(name);
       },
     [dispatch],
   );
@@ -209,7 +217,10 @@ export const useForm = ({ validateOnBlur, clearErrorOnChange }: UseFormOptions =
   );
 
   const handleSubmit = useCallback(
-    (onSuccess?: (state: FormStateType) => void, onError?: (state: FormStateType) => void) =>
+    (
+        onSuccess?: (state: FormStateType) => void,
+        onError?: (state: FormStateType, errors: ErrorMessagesRefType) => void,
+      ) =>
       (e: FormEvent<HTMLFormElement>) => {
         {
           e.preventDefault();
@@ -217,7 +228,7 @@ export const useForm = ({ validateOnBlur, clearErrorOnChange }: UseFormOptions =
           const hasErrors = validateForm();
           const state = getState();
 
-          if (hasErrors) onError?.(state);
+          if (hasErrors) onError?.(state, getErrors());
           else onSuccess?.(state);
         }
       },
@@ -237,6 +248,7 @@ export const useForm = ({ validateOnBlur, clearErrorOnChange }: UseFormOptions =
       getError,
       handleSubmit,
       validateField,
+      getErrors,
     }),
     [
       resetForm,
@@ -249,6 +261,7 @@ export const useForm = ({ validateOnBlur, clearErrorOnChange }: UseFormOptions =
       getError,
       handleSubmit,
       validateField,
+      getErrors,
     ],
   );
 };

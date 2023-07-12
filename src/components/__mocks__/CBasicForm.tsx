@@ -4,10 +4,10 @@ import { Form } from '../Form';
 import { Input } from './Input';
 import { FormProvider } from '../../context';
 
-export const CBasicForm = ({ onSuccess = () => {} }) => {
+export const CBasicForm = ({ onSuccess = () => {}, onError = () => {} }) => {
   return (
     <FormProvider>
-      <Form onSuccess={onSuccess}>
+      <Form onSuccess={onSuccess} onError={onError}>
         <Field>
           <Input
             name="name"
